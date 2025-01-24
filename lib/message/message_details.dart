@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:travel_app/message/widgets/message_card.dart';
 
 class MessageDetails extends StatelessWidget {
   final Conversation conversation;
@@ -7,9 +8,9 @@ class MessageDetails extends StatelessWidget {
   const MessageDetails({super.key, required this.conversation});
   Widget _buildMessage(int index) {
     final messageContent = conversation.messages[index];
-    if (messageContent.user == conversation.sender) {
-      return SentMessageWidget(content: messageContent);
-    }
+    // if (messageContent.user == conversation.messages.se) {
+    //   return SentMessageWidget(content: messageContent);
+    // }
     return RecievedMessageWidget(receivedContent: messageContent);
   }
 
@@ -145,7 +146,7 @@ class RecievedMessageWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(DateFormat.jm().format(receivedContent.recievedAt)),
+                    Text(DateFormat.jm().format(receivedContent.lastSentAt)),
                     Icon(Icons.check)
                   ],
                 )
@@ -158,22 +159,13 @@ class RecievedMessageWidget extends StatelessWidget {
   }
 }
 
-class Conversation {
-  final String sender;
-  final String receiver;
-  final List<MessageContent> messages;
-
-  Conversation(
-      {required this.sender, required this.receiver, required this.messages});
-}
-
 class MessageContent {
   final String message;
   final DateTime sentAt;
   final String userProfileImageUrl;
   final bool isSeen;
   final String user;
-  final DateTime recievedAt;
+  final DateTime lastSentAt;
 
   MessageContent({
     required this.message,
@@ -181,6 +173,6 @@ class MessageContent {
     required this.userProfileImageUrl,
     this.isSeen = false,
     required this.user,
-    required this.recievedAt,
+    required this.lastSentAt,
   });
 }

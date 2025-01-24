@@ -5,6 +5,7 @@ import 'package:travel_app/detailspage/details_page.dart';
 import 'package:travel_app/homepage/home_page.dart';
 import 'package:travel_app/message/message_details.dart';
 import 'package:travel_app/message/message_home.dart';
+import 'package:travel_app/message/widgets/message_card.dart';
 import 'package:travel_app/otpverification/otp_verification.dart';
 import 'package:travel_app/popularpackagepage/popular_package_page.dart';
 import 'package:travel_app/popularplacespage/popular_places.dart';
@@ -137,10 +138,9 @@ final GoRouter router = GoRouter(
                   builder: (context, state) {
                     return MessageDetails(
                       conversation: Conversation(
-                          sender: 'sender',
-                          receiver: 'receiver',
-                          messages: []
-                         ),
+                        profileImage: '',
+                        userName: 'Pradip',
+                      ),
                     );
                   },
                 )

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:travel_app/message/message_details.dart';
 
 enum UserStatus {
   active,
@@ -10,12 +11,12 @@ enum UserStatus {
 }
 
 class MessageCard extends StatelessWidget {
-  final Message message;
+  final Conversation conversation;
   final UserStatus status;
 
   const MessageCard({
     super.key,
-    required this.message,
+    required this.conversation,
     this.status = UserStatus.active,
   });
 
@@ -39,14 +40,14 @@ class MessageCard extends StatelessWidget {
         context.goNamed(
           'message-details',
           pathParameters: {
-            'username': message.userName,
+            'username': conversation.userName,
           },
         );
       },
       leading: Stack(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(message.profileImage),
+            backgroundImage: NetworkImage(conversation.profileImage),
           ),
           Positioned(
             bottom: 0,
@@ -66,46 +67,46 @@ class MessageCard extends StatelessWidget {
           )
         ],
       ),
-      title: Text(message.userName),
-      subtitle: message.isTyping
+      title: Text(conversation.userName),
+      subtitle: conversation.isTyping
           ? Text(
               'Typing...',
               style: TextStyle(color: Colors.blue),
             )
-          : Text(message.lastMessage),
+          : Text(conversation.messages.isNotEmpty
+              ? conversation.messages.last.message
+              : '-'),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Visibility(
-            visible: message.isRead,
+            visible: conversation.isRead,
             child: Icon(Icons.check_box, color: Colors.green),
           ),
-          // message.isSeen ? Icon(Icons.check) : SizedBox(),
+          // conversation.isSeen ? Icon(Icons.check) : SizedBox(),
           Visibility(
-            visible: message.isSeen,
+            visible: conversation.isSeen,
             child: Icon(Icons.check),
           ),
-          Text(DateFormat.jm().format(message.lastSentAt)),
+          // Text(DateFormat.jm().format(message.messages.last.lastSentAt)),
         ],
       ),
     );
   }
 }
 
-class Message {
+class Conversation {
   final String profileImage;
   final String userName;
-  final String lastMessage;
-  final DateTime lastSentAt;
   final bool isSeen;
   final bool isTyping;
   final bool isRead;
+  List<MessageContent> messages;
 
-  Message({
+  Conversation({
     required this.profileImage,
     this.isSeen = false,
-    required this.lastMessage,
-    required this.lastSentAt,
+    this.messages = const [],
     required this.userName,
     this.isTyping = false,
     this.isRead = false,
